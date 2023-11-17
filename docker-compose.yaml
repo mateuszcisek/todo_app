@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  web_app:
+    container_name: cybersmart_assessment_web_app
+    restart: unless-stopped
+    depends_on:
+      - database
+    build:
+      context: .
+      target: development
+    command:
+      - /bin/sh
+      - -c
+      - |
+        python manage.py collectstatic --noinput
+        python manage.py wait_for_database
+        python manage.py migrate
+        python manage.py runserver 0.0.0.0:8080
+    env_file: .env
+    ports:
+      - 8080:8080
+    volumes:
+      - ./manage.py:/home/user/app/manage.py
+      - ./src/cybersmart_assessment:/home/user/app/cybersmart_assessment/
+      - ./_static:/home/user/static
+
+  database:
+    container_name: cybersmart_assessment_database
+    image: postgres:16.1
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_DB: "${TODO_DATABASE_NAME:?Database name is not set}"
+      POSTGRES_USER: "${TODO_DATABASE_USER:?Database user is not set}"
+      POSTGRES_PASSWORD: "${TODO_DATABASE_PASSWORD:?Database password is not set}"
+    expose:
+      - 5432
+    volumes:
+      - database_storage:/var/lib/postgresql/data
+
+volumes:
+  database_storage:

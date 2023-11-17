@@ -1,0 +1,71 @@
+[tool.poetry]
+name = "cybersmart_assessment"
+version = "0.1.0"
+description = "This project is a solution for the technical assessment at CyberSmart"
+authors = ["Mateusz Cisek <mateuszcisek@hotmail.com>"]
+readme = "README.md"
+packages = [{ include = "cybersmart_assessment", from = "src"}]
+
+[tool.poetry.dependencies]
+python            = "^3.11"
+django            = "^4.2.7"         # BSD-3
+gunicorn          = "^21.2.0"        # MIT
+psycopg           = "^3.1.12"        # LGPLv3
+pydantic          = "^2.5.1"         # MIT
+pydantic-settings = "^2.1.0"         # MIT
+pytz              = "^2023.3.post1"  # MIT
+
+[tool.poetry.group.dev.dependencies]
+black             = "^23.11.0"       # MIT
+ruff              = "^0.1.5"         # MIT
+pytest            = "^7.4.3"         # MIT
+pytest-cov        = "^4.1.0"         # MIT
+pytest-django     = "^4.7.0"         # BSD
+pytest-env        = "^1.1.1"         # MIT
+
+[tool.ruff]
+select = ["B", "D", "E", "F", "I", "N", "Q"]
+ignore = [
+    "D100",  # Missing docstring in public module
+    "D104",  # Missing docstring in public package
+    "D105",  # Missing docstring in magic method
+    "D106",  # Missing docstring in public nested class
+    "D107",  # Missing docstring in `__init__`
+    "D200",  # One-line docstring should fit on one line
+    "D203",  # 1 blank line required before class docstring
+    "D205",  # 1 blank line required between summary line and description
+    "D212",  # Multi-line docstring summary should start at the first line
+    "D213",  # Multi-line docstring summary should start at the second line
+    "D415",  # First line should end with a period, question mark, or exclamation point
+    "D400",  # First line should end with a period
+    "F403",  # from {name} import * used; unable to detect undefined names
+    "F405",  # {name} may be undefined, or defined from star imports:
+]
+ignore-init-module-imports = true
+show-fixes = true
+
+[tool.ruff.flake8-unused-arguments]
+ignore-variadic-names = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+addopts = [
+    "-vv",
+    "--cov=cybersmart_assessment",
+    "--cov-report=term",
+    "--cov-report=html",
+    "--cov-fail-under=100",
+]
+pythonpath = [
+  ".",
+]
+DJANGO_SETTINGS_MODULE = "cybersmart_assessment.core.settings.testing"
+
+[tool.pytest_env]
+TODO_STATIC_FILES_DIR = "./_static"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
