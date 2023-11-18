@@ -15,7 +15,13 @@ def _get_values(
     database_port: Optional[int] = "1234",
     database_user: Optional[str] = "db_user",
     debug: Optional[str] = "False",
+    document_store_host: Optional[str] = "localhost",
+    document_store_name: Optional[str] = "document_db_name",
+    document_store_password: Optional[str] = "document_db_pass",
+    document_store_port: Optional[int] = "2345",
+    document_store_user: Optional[str] = "document_db_user",
     logging_level: Optional[str] = "info",
+    public_host: Optional[str] = "localhost",
     secret_key: Optional[str] = "very-very-secret-top-secret-key",
     static_files_dir: Optional[str] = "/tmp",
     time_zone: Optional[str] = "Europe/London",
@@ -31,7 +37,13 @@ def _get_values(
         "DATABASE_PORT": database_port,
         "DATABASE_USER": database_user,
         "DEBUG": debug,
+        "DOCUMENT_STORE_HOST": document_store_host,
+        "DOCUMENT_STORE_NAME": document_store_name,
+        "DOCUMENT_STORE_PASSWORD": document_store_password,
+        "DOCUMENT_STORE_PORT": document_store_port,
+        "DOCUMENT_STORE_USER": document_store_user,
         "LOGGING_LEVEL": logging_level,
+        "PUBLIC_HOST": public_host,
         "SECRET_KEY": secret_key,
         "STATIC_FILES_DIR": static_files_dir,
         "TIME_ZONE": time_zone,
@@ -56,8 +68,14 @@ def test_settings_are_correct():
         "database_password": "db_pass",
         "database_port": 1234,
         "database_user": "db_user",
+        "document_store_host": "localhost",
+        "document_store_name": "document_db_name",
+        "document_store_password": "document_db_pass",
+        "document_store_port": 2345,
+        "document_store_user": "document_db_user",
         "debug": False,
         "logging_level": "INFO",
+        "public_host": "localhost",
         "secret_key": "very-very-secret-top-secret-key",
         "static_files_dir": Path("/tmp"),
         "time_zone": "Europe/London",
@@ -73,8 +91,17 @@ def test_settings_are_correct():
         )
         assert config.database_port == expected["database_port"]
         assert config.database_user == expected["database_user"]
+        assert config.document_store_host == expected["document_store_host"]
+        assert config.document_store_name == expected["document_store_name"]
+        assert (
+            config.document_store_password.get_secret_value()
+            == expected["document_store_password"]
+        )
+        assert config.document_store_port == expected["document_store_port"]
+        assert config.document_store_user == expected["document_store_user"]
         assert config.debug == expected["debug"]
         assert config.logging_level == expected["logging_level"]
+        assert config.public_host == expected["public_host"]
         assert config.secret_key.get_secret_value() == expected["secret_key"]
         assert config.static_files_dir == expected["static_files_dir"]
         assert config.time_zone == expected["time_zone"]
@@ -222,6 +249,18 @@ def test_secret_key_too_short():
         AppConfig()
 
 
+def test_public_host():
+    """
+    Given an environment variable for PUBLIC_HOST set
+    When we create a new object of AppConfig class
+    Then the value for public_host is set to a correct value.
+    """
+    with patch.dict(os.environ, _get_values(public_host="sample-host")):
+        config = AppConfig()
+
+    assert config.public_host == "sample-host"
+
+
 def test_database_host():
     """
     Given an environment variable for DATABASE_HOST set
@@ -294,6 +333,78 @@ def test_database_name():
     assert config.database_name == "sample-db"
 
 
+def test_document_store_host():
+    """
+    Given an environment variable for DOCUMENT_STORE_HOST set
+    When we create a new object of AppConfig class
+    Then the value for document_store_host is set to a correct value.
+    """
+    with patch.dict(os.environ, _get_values(document_store_host="sample-host")):
+        config = AppConfig()
+
+    assert config.document_store_host == "sample-host"
+
+
+def test_document_store_port():
+    """
+    Given an environment variable for DOCUMENT_STORE_PORT set
+    When we create a new object of AppConfig class
+    Then the value for document_store_port is set to a correct value.
+    """
+    with patch.dict(os.environ, _get_values(document_store_port="1234")):
+        config = AppConfig()
+
+    assert config.document_store_port == 1234
+
+
+def test_document_store_port_incorrect_value():
+    """
+    Given an environment variable for DOCUMENT_STORE_PORT set to an incorrect value
+    When we create a new object of AppConfig class
+    Then a ValidationError is raised.
+    """
+    with patch.dict(
+        os.environ, _get_values(document_store_port="incorrect-value")
+    ), pytest.raises(ValidationError):
+        AppConfig()
+
+
+def test_document_store_user():
+    """
+    Given an environment variable for DOCUMENT_STORE_USER set
+    When we create a new object of AppConfig class
+    Then the value for document_store_user is set to a correct value.
+    """
+    with patch.dict(os.environ, _get_values(document_store_user="sample-user")):
+        config = AppConfig()
+
+    assert config.document_store_user == "sample-user"
+
+
+def test_document_store_password():
+    """
+    Given an environment variable for DOCUMENT_STORE_PASSWORD set
+    When we create a new object of AppConfig class
+    Then the value for document_store_password is set to a correct value.
+    """
+    with patch.dict(os.environ, _get_values(document_store_password="sample-pass")):
+        config = AppConfig()
+
+    assert config.document_store_password.get_secret_value() == "sample-pass"
+
+
+def test_document_store_name():
+    """
+    Given an environment variable for DOCUMENT_STORE_NAME set
+    When we create a new object of AppConfig class
+    Then the value for document_store_name is set to a correct value.
+    """
+    with patch.dict(os.environ, _get_values(document_store_name="sample-db")):
+        config = AppConfig()
+
+    assert config.document_store_name == "sample-db"
+
+
 @pytest.mark.parametrize(
     "field_name",
     ("DEBUG", "LOGGING_LEVEL", "TIME_ZONE"),
@@ -311,6 +422,7 @@ def test_missing_optional_fields(field_name):
 @pytest.mark.parametrize(
     "field_name",
     (
+        "PUBLIC_HOST",
         "SECRET_KEY",
         "STATIC_FILES_DIR",
         "DATABASE_HOST",
@@ -318,6 +430,11 @@ def test_missing_optional_fields(field_name):
         "DATABASE_USER",
         "DATABASE_PASSWORD",
         "DATABASE_NAME",
+        "DOCUMENT_STORE_HOST",
+        "DOCUMENT_STORE_PORT",
+        "DOCUMENT_STORE_USER",
+        "DOCUMENT_STORE_PASSWORD",
+        "DOCUMENT_STORE_NAME",
     ),
 )
 def test_missing_required_fields(field_name, monkeypatch):

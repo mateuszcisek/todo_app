@@ -6,6 +6,7 @@ services:
     restart: unless-stopped
     depends_on:
       - database
+      - document_store
     build:
       context: .
       target: production
@@ -15,9 +16,12 @@ services:
       - |
         python manage.py collectstatic --noinput
         python manage.py wait_for_database
+        python manage.py wait_for_document_store
         python manage.py migrate
         gunicorn --bind 0.0.0.0:8000 --threads 4 cybersmart_assessment.core.wsgi:application
     env_file: .env
+    environment:
+      TODO_DEBUG: "False"
     expose:
       - 8000
     volumes:
@@ -37,6 +41,20 @@ services:
     volumes:
       - database_storage:/var/lib/postgresql/data
 
+  document_store:
+    container_name: cybersmart_assessment_document_store
+    image: mongo:7.0.3
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${TODO_DOCUMENT_STORE_USER:?Document store user is not set}"
+      MONGO_INITDB_ROOT_PASSWORD: "${TODO_DOCUMENT_STORE_PASSWORD:?Document store password is not set}"
+      MONGO_INITDB_DATABASE: "${TODO_DOCUMENT_STORE_NAME:?Document store name is not set}"
+    expose:
+      - 27017
+    volumes:
+      - document_store_storage:/data/db
+
   proxy:
     container_name: cybersmart_assessment_proxy
     image: nginx:1.25.3
@@ -52,4 +70,5 @@ services:
 
 volumes:
   database_storage:
+  document_store_storage:
   static_files:

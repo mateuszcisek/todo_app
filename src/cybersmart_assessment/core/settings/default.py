@@ -5,7 +5,7 @@ config = AppConfig()
 DEBUG = config.debug
 SECRET_KEY = config.secret_key
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [config.public_host]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -14,6 +14,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_extensions",
+    "cybersmart_assessment.todo",
     "cybersmart_assessment.system",
 ]
 
@@ -57,6 +59,12 @@ DATABASES = {
         "PORT": config.database_port,
     }
 }
+
+DOCUMENT_STORE_HOST = config.document_store_host
+DOCUMENT_STORE_PORT = config.document_store_port
+DOCUMENT_STORE_USER = config.document_store_user
+DOCUMENT_STORE_PASSWORD = config.document_store_password.get_secret_value()
+DOCUMENT_STORE_NAME = config.document_store_name
 
 AUTH_PASSWORD_VALIDATORS = [
     {

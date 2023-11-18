@@ -13,6 +13,7 @@ class AppConfig(BaseSettings):
 
     debug: bool = Field(False)
     logging_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = Field("INFO")
+    public_host: str
     secret_key: SecretStr
     static_files_dir: DirectoryPath
     time_zone: str = Field("Europe/London")
@@ -22,6 +23,12 @@ class AppConfig(BaseSettings):
     database_user: str
     database_password: SecretStr
     database_name: str
+
+    document_store_host: str
+    document_store_port: int
+    document_store_user: str
+    document_store_password: SecretStr
+    document_store_name: str
 
     model_config = SettingsConfigDict(
         case_sensitive=False,
