@@ -66,6 +66,8 @@ DOCUMENT_STORE_USER = config.document_store_user
 DOCUMENT_STORE_PASSWORD = config.document_store_password.get_secret_value()
 DOCUMENT_STORE_NAME = config.document_store_name
 
+WEATHER_API_KEY = config.weather_api_key
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",  # noqa: E501

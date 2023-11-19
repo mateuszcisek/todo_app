@@ -6,7 +6,7 @@ from django.views.generic import ListView
 from cybersmart_assessment.todo.models import Task
 
 
-class TodoListView(ListView):
+class TaskListView(ListView):
     """Return a view with a list of Task entries."""
 
     template_name = "task/list.html"

@@ -25,6 +25,7 @@ def _get_values(
     secret_key: Optional[str] = "very-very-secret-top-secret-key",
     static_files_dir: Optional[str] = "/tmp",
     time_zone: Optional[str] = "Europe/London",
+    weather_api_key: Optional[str] = "sample_api_key",
     excluded_fields: Optional[List[str]] = None,
 ) -> Dict[str, str]:
     """
@@ -47,6 +48,7 @@ def _get_values(
         "SECRET_KEY": secret_key,
         "STATIC_FILES_DIR": static_files_dir,
         "TIME_ZONE": time_zone,
+        "WEATHER_API_KEY": weather_api_key,
     }
 
     if excluded_fields:
@@ -79,6 +81,7 @@ def test_settings_are_correct():
         "secret_key": "very-very-secret-top-secret-key",
         "static_files_dir": Path("/tmp"),
         "time_zone": "Europe/London",
+        "weather_api_key": "sample_api_key",
     }
 
     with patch.dict(os.environ, _get_values()):
@@ -105,6 +108,7 @@ def test_settings_are_correct():
         assert config.secret_key.get_secret_value() == expected["secret_key"]
         assert config.static_files_dir == expected["static_files_dir"]
         assert config.time_zone == expected["time_zone"]
+        assert config.weather_api_key == expected["weather_api_key"]
 
 
 def test_static_files_dir(tmp_path):
@@ -259,6 +263,18 @@ def test_public_host():
         config = AppConfig()
 
     assert config.public_host == "sample-host"
+
+
+def test_weather_api_key():
+    """
+    Given an environment variable for WEATHER_API_KEY set
+    When we create a new object of AppConfig class
+    Then the value for weather_api_key is set to a correct value.
+    """
+    with patch.dict(os.environ, _get_values(weather_api_key="sample-key")):
+        config = AppConfig()
+
+    assert config.weather_api_key == "sample-key"
 
 
 def test_database_host():
@@ -425,6 +441,7 @@ def test_missing_optional_fields(field_name):
         "PUBLIC_HOST",
         "SECRET_KEY",
         "STATIC_FILES_DIR",
+        "WEATHER_API_KEY",
         "DATABASE_HOST",
         "DATABASE_PORT",
         "DATABASE_USER",
