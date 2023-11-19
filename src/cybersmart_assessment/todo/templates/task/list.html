@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if not active_tasks and not finished_tasks %}
+<div class="row justify-content-center mt-5">
+  <div class="col-xl-6 col-lg-8 col-md-12">
+    <h1>No tasks to display</h1>
+  </div>
+</div>
+{% endif %}
+
+{% if active_tasks %}
+<div class="row justify-content-center mt-5">
+  <div class="col-xl-6 col-lg-8 col-md-12">
+    <h1>Active tasks</h1>
+
+    <div class="row mt-4">
+      {% for task in active_tasks %}
+      {% include "task/_partials/task_list_item.html" with task=task %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if finished_tasks %}
+<div class="row justify-content-center mt-5">
+  <div class="col-xl-6 col-lg-8 col-md-12">
+    <h1>Finished tasks</h1>
+
+    <div class="row mt-4">
+      {% for task in finished_tasks %}
+      {% include "task/_partials/task_list_item.html" with task=task %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

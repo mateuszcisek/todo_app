@@ -12,6 +12,7 @@ django            = "^4.2.7"         # BSD-3
 django-extensions = "^3.2.3"         # MIT
 gunicorn          = "^21.2.0"        # MIT
 mongoengine       = "^0.27.0"        # MIT
+mongomock         = "^4.1.2"         # BSD
 psycopg           = "^3.1.12"        # LGPLv3
 pydantic          = "^2.5.1"         # MIT
 pydantic-settings = "^2.1.0"         # MIT
@@ -67,6 +68,15 @@ DJANGO_SETTINGS_MODULE = "cybersmart_assessment.core.settings.testing"
 
 [tool.pytest_env]
 TODO_STATIC_FILES_DIR = "./_static"
+TODO_TEST_SESSION = "True"
+
+[tool.coverage.run]
+omit = [
+  "__init__.py",
+  "src/cybersmart_assessment/core/asgi.py",
+  "src/cybersmart_assessment/core/wsgi.py",
+  "tests/*",
+]
 
 [build-system]
 requires = ["poetry-core"]

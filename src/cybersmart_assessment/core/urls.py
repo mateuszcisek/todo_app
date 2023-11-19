@@ -1,6 +1,8 @@
-from django.contrib import admin
-from django.urls import path
+from django.urls import include, re_path
+
+from cybersmart_assessment.core.views import HomepageView
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    re_path(r"^$", HomepageView.as_view(), name="homepage"),
+    re_path(r"^todo/", include(("cybersmart_assessment.todo.urls", "todo"))),
 ]
