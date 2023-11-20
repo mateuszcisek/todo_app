@@ -1,8 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block content %}
+{% block custom_styles %}
+<link rel="stylesheet" href="{% static 'todo/css/task.css' %}" />
+{% endblock %}
 
+{% block custom_meta %}
+<meta http-equiv="refresh" content="60" />
+{% endblock %}
+
+{% block content %}
 {% if not active_tasks and not finished_tasks %}
 <div class="row justify-content-center mt-5">
   <div class="col-xl-6 col-lg-8 col-md-12">
@@ -38,9 +45,4 @@
   </div>
 </div>
 {% endif %}
-
-{% endblock %}
-
-{% block custom_styles %}
-<link rel="stylesheet" href="{% static 'todo/css/task.css' %}" />
 {% endblock %}
