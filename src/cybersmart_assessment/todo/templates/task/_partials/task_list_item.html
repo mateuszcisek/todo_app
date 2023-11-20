@@ -4,7 +4,7 @@
     <div class="text-body-tertiary mb-2 text-truncate">
       {{ task.location.label }}</div>
     <div class="text-right">
-      <a href="#" class="text-secondary">edit</a>
+      <a href="{% url 'todo:task-edit' task.id %}" class="text-secondary">edit</a>
     </div>
   </div>
 </div>

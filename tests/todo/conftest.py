@@ -12,6 +12,16 @@ def clear_document_store():
         db.drop_collection(name)
 
 
+@pytest.fixture(name="task")
+def task_fixture():
+    """Create and return a sample task."""
+    return Task.objects.create(
+        content="Sample task",
+        location=Location(lat=10, lon=20, label="Sample location"),
+        weather=Weather(main="Snow", code=123, temperature=0.0),
+    )
+
+
 @pytest.fixture
 def create_active_tasks():
     """Create sample active tasks."""

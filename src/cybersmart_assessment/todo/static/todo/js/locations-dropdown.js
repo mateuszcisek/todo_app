@@ -7,7 +7,7 @@
  * @param {string} fieldSelector The selector for the dropdown field to use. 
  * @param {string} apiKey The Weather API to use for the requests.
  */
-function loadLocationsDropdown(fieldSelector, apiKey) {
+function loadLocationsDropdown(fieldSelector, apiKey, initSelection = null) {
   $(fieldSelector).select2({
     theme: 'bootstrap-5',
     placeholder: 'Start typing...',
@@ -37,5 +37,14 @@ function loadLocationsDropdown(fieldSelector, apiKey) {
         return { results };
       }
     }
-  })
+  });
+
+  if (initSelection) {
+    const field = $(fieldSelector);
+    const location = JSON.parse(initSelection);
+    field.append(
+      new Option(location.label, `${location.lat}::${location.lon}::${location.label}`, true, true)
+    )
+    field.trigger({ type: 'select2:select' });
+  }
 };
