@@ -9,6 +9,7 @@ from mongoengine import (
 )
 
 from cybersmart_assessment.system.document_store import DocumentStoreConnection
+from cybersmart_assessment.todo.colors import get_task_css_classes
 
 DocumentStoreConnection()
 
@@ -31,7 +32,6 @@ class Weather(EmbeddedDocument):
     """
 
     main = StringField(required=True)
-    code = FloatField(required=True)
     temperature = FloatField(required=True)
 
 
@@ -43,6 +43,11 @@ class Task(Document):
     weather = EmbeddedDocumentField(Weather)
     created_at = DateTimeField()
     marked_as_done_at = DateTimeField()
+
+    @property
+    def css_classes(self) -> str:
+        """CSS classes for the task."""
+        return get_task_css_classes(self)
 
     def save(self, *args, **kwargs):
         """Update the created_at datetime if it's not yet set."""

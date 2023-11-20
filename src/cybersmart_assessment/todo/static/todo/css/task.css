@@ -1,0 +1,23 @@
+.border-indigo {
+    border: 1px solid #3f51b5;
+}
+
+.bg-indigo-100 {
+    background-color: #c5cae9;
+}
+
+.border-orange {
+    border: 1px solid #ff9800
+}
+
+.bg-orange-100 {
+    background-color: #ffe0b2;
+}
+
+.border-red {
+    border: 1px solid #f44336;
+}
+
+.bg-red-100 {
+    background-color: #ffcdd2;
+}

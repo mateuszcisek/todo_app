@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 
@@ -38,4 +39,8 @@
 </div>
 {% endif %}
 
+{% endblock %}
+
+{% block custom_styles %}
+<link rel="stylesheet" href="{% static 'todo/css/task.css' %}" />
 {% endblock %}

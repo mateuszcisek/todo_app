@@ -12,7 +12,7 @@ def test_creating_task():
     task = Task.objects.create(
         content="sample task",
         location=Location(lat=0, lon=0, label="sample location"),
-        weather=Weather(main="Snow", code=123, temperature=0.0),
+        weather=Weather(main="Snow", temperature=0.0),
     )
 
     assert task.id is not None
@@ -25,7 +25,6 @@ def test_creating_task():
     assert new_task.location.lon == 0
     assert new_task.location.label == "sample location"
     assert new_task.weather.main == "Snow"
-    assert new_task.weather.code == 123
 
 
 def test_creating_task_without_location():
@@ -37,7 +36,7 @@ def test_creating_task_without_location():
     with pytest.raises(ValidationError):
         Task.objects.create(
             content="sample task",
-            weather=Weather(main="Snow", code=123, temperature=0.0),
+            weather=Weather(main="Snow", temperature=0.0),
         )
 
 

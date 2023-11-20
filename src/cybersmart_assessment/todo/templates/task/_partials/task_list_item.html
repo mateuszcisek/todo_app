@@ -1,10 +1,13 @@
 <div class="col-lg-6 col-md-12" id="task#{{ task.id }}">
-  <div class="border border-primary p-3 mb-4">
+  <div class="{{ task.css_classes }} p-3 mb-4">
     <div class="mb-2">{{ task.content }}</div>
-    <div class="text-body-tertiary mb-2 text-truncate">{{ task.location.label }}</div>
+    <div class="text-body-tertiary mb-2 text-truncate">
+      {{ task.location.label }}
+    </div>
     {% if task.weather %}
     <div class="text-body-tertiary mb-2 text-truncate">
-      Temperature: {{ task.weather.temperature }}&deg;C</div>
+      {{ task.weather.temperature }}&deg;C, {{ task.weather.main }}
+    </div>
     {% endif %}
     <div class="text-right">
       <a href="{% url 'todo:task-edit' task.id %}"

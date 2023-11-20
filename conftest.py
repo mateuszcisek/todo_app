@@ -18,7 +18,7 @@ def task_fixture():
     return Task.objects.create(
         content="Sample task",
         location=Location(lat=10, lon=20, label="Sample location"),
-        weather=Weather(main="Snow", code=123, temperature=0.0),
+        weather=Weather(main="Snow", temperature=0.0),
     )
 
 
@@ -29,7 +29,7 @@ def create_active_tasks():
         Task.objects.create(
             content=f"Sample task {index}",
             location=Location(lat=index, lon=index, label=f"Location {index}"),
-            weather=Weather(main="Snow", code=index, temperature=0.0),
+            weather=Weather(main="Snow", temperature=0.0),
         )
 
 
@@ -41,5 +41,5 @@ def create_finished_tasks():
             content=f"Finished task {index}",
             marked_as_done_at=timezone.now(),
             location=Location(lat=index, lon=index, label=f"Location {index}"),
-            weather=Weather(main="Snow", code=index, temperature=0.0),
+            weather=Weather(main="Snow", temperature=0.0),
         )

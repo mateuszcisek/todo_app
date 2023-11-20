@@ -39,7 +39,6 @@ def update_weather_for_task(task) -> None:
     # The first weather condition in API respond is primary and this is what we use.
     task.weather = Weather(
         main=data["weather"][0]["main"],
-        code=data["weather"][0]["id"],
         temperature=data["main"]["temp"],
     )
     task.save()

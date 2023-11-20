@@ -33,7 +33,7 @@ def test_update_weather_for_task(mock_get, task):
     mock_get.return_value = _mock_response(
         200,
         {
-            "weather": [{"main": "Snow", "id": 100}],
+            "weather": [{"main": "Snow"}],
             "main": {"temp": 10.0},
         },
     )
@@ -52,7 +52,6 @@ def test_update_weather_for_task(mock_get, task):
 
     updated_task = Task.objects.get(id=task.id)
     assert updated_task.weather.main == "Snow"
-    assert updated_task.weather.code == 100
     assert updated_task.weather.temperature == 10.0
 
 
@@ -103,7 +102,7 @@ def test_update_weather_for_active_tasks(mock_get):
     mock_get.return_value = _mock_response(
         200,
         {
-            "weather": [{"main": "Snow", "id": 100}],
+            "weather": [{"main": "Snow"}],
             "main": {"temp": 10.0},
         },
     )
