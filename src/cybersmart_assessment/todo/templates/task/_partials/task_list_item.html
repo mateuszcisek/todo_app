@@ -4,7 +4,15 @@
     <div class="text-body-tertiary mb-2 text-truncate">
       {{ task.location.label }}</div>
     <div class="text-right">
-      <a href="{% url 'todo:task-edit' task.id %}" class="text-secondary">edit</a>
+      <a href="{% url 'todo:task-edit' task.id %}"
+        class="text-secondary me-3">edit</a>
+      {% if task.marked_as_done_at %}
+      <a href="{% url 'todo:mark-task-as-active' task.id %}"
+        class="text-secondary">mark as active</a>
+      {% else %}
+      <a href="{% url 'todo:mark-task-as-finished' task.id %}"
+        class="text-secondary">mark as finished</a>
+      {% endif %}
     </div>
   </div>
 </div>
