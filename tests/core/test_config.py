@@ -4,8 +4,8 @@ from typing import Dict, List, Optional
 from unittest.mock import patch
 
 import pytest
-from cybersmart_assessment.core.config import AppConfig
 from pydantic import ValidationError
+from todo_app.core.config import AppConfig
 
 
 def _get_values(

@@ -1,6 +1,6 @@
 import pytest
-from cybersmart_assessment.system.document_store import DocumentStoreConnection
-from cybersmart_assessment.todo.models import Location, Task, Weather
+from todo_app.system.document_store import DocumentStoreConnection
+from todo_app.todo.models import Location, Task, Weather
 from django.utils import timezone
 
 

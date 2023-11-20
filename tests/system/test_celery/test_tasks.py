@@ -1,14 +1,14 @@
 from unittest.mock import Mock, patch
 
 import pytest
-from cybersmart_assessment.system.celery.tasks import (
+from django.conf import settings
+from todo_app.system.celery.tasks import (
     update_weather_for_active_tasks,
     update_weather_for_task,
 )
-from cybersmart_assessment.todo.models import Task
-from django.conf import settings
+from todo_app.todo.models import Task
 
-MODULE_PATH = "cybersmart_assessment.system.celery.tasks"
+MODULE_PATH = "todo_app.system.celery.tasks"
 
 
 def _mock_response(status_code: int, data: dict) -> Mock:

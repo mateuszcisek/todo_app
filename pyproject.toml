@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "cybersmart_assessment"
+name = "todo_app"
 version = "0.1.0"
-description = "This project is a solution for the technical assessment at CyberSmart"
+description = "Todo app with weather for each task"
 authors = ["Mateusz Cisek <mateuszcisek@hotmail.com>"]
 readme = "README.md"
-packages = [{ include = "cybersmart_assessment", from = "src"}]
+packages = [{ include = "todo_app", from = "src"}]
 
 [tool.poetry.dependencies]
 python             = "^3.11"
@@ -59,7 +59,7 @@ convention = "google"
 [tool.pytest.ini_options]
 addopts = [
     "-vv",
-    "--cov=cybersmart_assessment",
+    "--cov=todo_app",
     "--cov-report=term",
     "--cov-report=html",
     "--cov-fail-under=100",
@@ -67,7 +67,7 @@ addopts = [
 pythonpath = [
   ".",
 ]
-DJANGO_SETTINGS_MODULE = "cybersmart_assessment.core.settings.testing"
+DJANGO_SETTINGS_MODULE = "todo_app.core.settings.testing"
 
 [tool.pytest_env]
 TODO_STATIC_FILES_DIR = "./static"
@@ -76,8 +76,8 @@ TODO_TEST_SESSION = "True"
 [tool.coverage.run]
 omit = [
   "__init__.py",
-  "src/cybersmart_assessment/core/asgi.py",
-  "src/cybersmart_assessment/core/wsgi.py",
+  "src/todo_app/core/asgi.py",
+  "src/todo_app/core/wsgi.py",
   "tests/*",
 ]
 

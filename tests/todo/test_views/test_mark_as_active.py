@@ -1,7 +1,7 @@
 import pytest
-from cybersmart_assessment.todo.models import Task
 from django.urls import reverse
 from django.utils import timezone
+from todo_app.todo.models import Task
 
 URL_PATH = "todo:mark-task-as-active"
 

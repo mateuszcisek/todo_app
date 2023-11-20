@@ -1,6 +1,6 @@
 import pytest
-from cybersmart_assessment.todo.models import Location
-from cybersmart_assessment.todo.utils import get_location_from_string, str_to_float
+from todo_app.todo.models import Location
+from todo_app.todo.utils import get_location_from_string, str_to_float
 
 
 @pytest.mark.parametrize(

@@ -1,6 +1,6 @@
 import pytest
-from cybersmart_assessment.todo.colors import get_task_css_classes
-from cybersmart_assessment.todo.models import Location, Task, Weather
+from todo_app.todo.colors import get_task_css_classes
+from todo_app.todo.models import Location, Task, Weather
 
 
 def _get_task(temperature: float, main: str) -> Task:

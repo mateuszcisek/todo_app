@@ -1,6 +1,6 @@
 import pytest
-from cybersmart_assessment.todo.models import Location, Task, Weather
 from mongoengine.errors import ValidationError
+from todo_app.todo.models import Location, Task, Weather
 
 
 def test_creating_task():

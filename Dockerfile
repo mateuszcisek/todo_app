@@ -66,10 +66,10 @@ RUN apk update \
 
 WORKDIR "${HOME_DIRECTORY}/app/"
 
-COPY src/cybersmart_assessment/ cybersmart_assessment
+COPY src/todo_app/ todo_app
 COPY manage.py .
 
 USER "${USERNAME}"
 EXPOSE 8080
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--threads", "4", "cybersmart_assessment.core.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--threads", "4", "todo_app.core.wsgi:application"]

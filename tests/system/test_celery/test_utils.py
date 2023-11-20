@@ -1,7 +1,7 @@
 from unittest.mock import Mock
 
 import pytest
-from cybersmart_assessment.system.celery.utils import (
+from todo_app.system.celery.utils import (
     get_log_prefix,
     get_task_id,
     get_task_name,

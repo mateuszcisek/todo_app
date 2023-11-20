@@ -1,6 +1,6 @@
 import pytest
-from cybersmart_assessment.todo.models import Task
 from django.urls import reverse
+from todo_app.todo.models import Task
 
 URL_PATH = "todo:task-edit"
 

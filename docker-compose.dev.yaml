@@ -2,7 +2,7 @@ version: "3"
 
 services:
   web_app:
-    container_name: cybersmart_assessment_web_app
+    container_name: todo_app_web_app
     restart: unless-stopped
     depends_on:
       - database
@@ -24,11 +24,11 @@ services:
       - 8080:8080
     volumes:
       - ./manage.py:/home/user/app/manage.py
-      - ./src/cybersmart_assessment:/home/user/app/cybersmart_assessment/
+      - ./src/todo_app:/home/user/app/todo_app/
       - ./static:/home/user/static
 
   database:
-    container_name: cybersmart_assessment_database
+    container_name: todo_app_database
     image: postgres:16.1
     restart: unless-stopped
     env_file: .env
@@ -42,7 +42,7 @@ services:
       - database_storage:/var/lib/postgresql/data
 
   document_store:
-    container_name: cybersmart_assessment_document_store
+    container_name: todo_app_document_store
     image: mongo:7.0.3
     restart: unless-stopped
     env_file: .env
@@ -56,14 +56,14 @@ services:
       - document_store_storage:/data/db
 
   cache:
-    container_name: cybersmart_assessment_cache
+    container_name: todo_app_cache
     image: redis:7.2.3
     expose:
       - 6379
     restart: unless-stopped
 
   weather_worker:
-    container_name: cybersmart_assessment_weather_worker
+    container_name: todo_app_weather_worker
     build:
       context: .
       target: development
@@ -75,7 +75,7 @@ services:
         python manage.py wait_for_document_store
         rm -f /app/celerybeat-schedule
         celery \
-          --app cybersmart_assessment.system.celery.app.app \
+          --app todo_app.system.celery.app.app \
           worker \
           --beat \
           --schedule-filename=/home/user/app/celerybeat-schedule \
@@ -84,7 +84,7 @@ services:
     env_file: .env
     volumes:
       - ./manage.py:/home/user/app/manage.py
-      - ./src/cybersmart_assessment:/home/user/app/cybersmart_assessment/
+      - ./src/todo_app:/home/user/app/todo_app/
       - ./static:/home/user/static
     depends_on:
       - web_app

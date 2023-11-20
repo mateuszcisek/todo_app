@@ -2,7 +2,7 @@ version: "3"
 
 services:
   web_app:
-    container_name: cybersmart_assessment_web_app
+    container_name: todo_app_web_app
     restart: unless-stopped
     depends_on:
       - database
@@ -18,7 +18,7 @@ services:
         python manage.py wait_for_database
         python manage.py wait_for_document_store
         python manage.py migrate
-        gunicorn --bind 0.0.0.0:8000 --threads 4 cybersmart_assessment.core.wsgi:application
+        gunicorn --bind 0.0.0.0:8000 --threads 4 todo_app.core.wsgi:application
     env_file: .env
     environment:
       TODO_DEBUG: "False"
@@ -28,7 +28,7 @@ services:
       - static_files:/home/user/static
 
   database:
-    container_name: cybersmart_assessment_database
+    container_name: todo_app_database
     image: postgres:16.1
     restart: unless-stopped
     env_file: .env
@@ -42,7 +42,7 @@ services:
       - database_storage:/var/lib/postgresql/data
 
   document_store:
-    container_name: cybersmart_assessment_document_store
+    container_name: todo_app_document_store
     image: mongo:7.0.3
     restart: unless-stopped
     env_file: .env
@@ -56,14 +56,14 @@ services:
       - document_store_storage:/data/db
 
   cache:
-    container_name: cybersmart_assessment_cache
+    container_name: todo_app_cache
     image: redis:7.2.3
     expose:
       - 6379
     restart: unless-stopped
 
   weather_worker:
-    container_name: cybersmart_assessment_weather_worker
+    container_name: todo_app_weather_worker
     build:
       context: .
       target: production
@@ -75,7 +75,7 @@ services:
         python manage.py wait_for_document_store
         rm -f /app/celerybeat-schedule
         celery \
-          --app cybersmart_assessment.system.celery.app.app \
+          --app todo_app.system.celery.app.app \
           worker \
           --beat \
           --schedule-filename=/home/user/app/celerybeat-schedule \
@@ -93,7 +93,7 @@ services:
     restart: on-failure
 
   proxy:
-    container_name: cybersmart_assessment_proxy
+    container_name: todo_app_proxy
     image: nginx:1.25.3
     depends_on:
       - web_app
