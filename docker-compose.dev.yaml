@@ -9,7 +9,7 @@ services:
       - document_store
     build:
       context: .
-      target: production
+      target: development
     command:
       - /bin/sh
       - -c
@@ -18,14 +18,14 @@ services:
         python manage.py wait_for_database
         python manage.py wait_for_document_store
         python manage.py migrate
-        gunicorn --bind 0.0.0.0:8000 --threads 4 cybersmart_assessment.core.wsgi:application
+        python manage.py runserver 0.0.0.0:8080
     env_file: .env
-    environment:
-      TODO_DEBUG: "False"
-    expose:
-      - 8000
+    ports:
+      - 8080:8080
     volumes:
-      - static_files:/home/user/static
+      - ./manage.py:/home/user/app/manage.py
+      - ./src/cybersmart_assessment:/home/user/app/cybersmart_assessment/
+      - ./static:/home/user/static
 
   database:
     container_name: cybersmart_assessment_database
@@ -66,7 +66,7 @@ services:
     container_name: cybersmart_assessment_weather_worker
     build:
       context: .
-      target: production
+      target: development
     command:
       - /bin/sh
       - -c
@@ -82,30 +82,16 @@ services:
           --logfile=/dev/null \
           --task-events
     env_file: .env
-    environment:
-      TODO_DEBUG: "False"
     volumes:
-      - static_files:/home/user/static
+      - ./manage.py:/home/user/app/manage.py
+      - ./src/cybersmart_assessment:/home/user/app/cybersmart_assessment/
+      - ./static:/home/user/static
     depends_on:
       - web_app
       - cache
       - document_store
     restart: on-failure
 
-  proxy:
-    container_name: cybersmart_assessment_proxy
-    image: nginx:1.25.3
-    depends_on:
-      - web_app
-    restart: unless-stopped
-    volumes:
-      - ./config/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
-      - ./config/nginx/proxy_params:/etc/nginx/proxy_params
-      - static_files:/app/static/
-    ports:
-      - 8080:8080
-
 volumes:
   database_storage:
   document_store_storage:
-  static_files:

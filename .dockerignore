@@ -17,7 +17,7 @@ _storage/
 config/
 conftest.py
 tests/
-_static/
+static/
 
 .dockerignore
 .env
