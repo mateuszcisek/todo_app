@@ -55,6 +55,43 @@ services:
     volumes:
       - document_store_storage:/data/db
 
+  cache:
+    container_name: cybersmart_assessment_cache
+    image: redis:7.2.3
+    expose:
+      - 6379
+    restart: unless-stopped
+
+  weather_worker:
+    container_name: cybersmart_assessment_weather_worker
+    build:
+      context: .
+      target: development
+    command:
+      - /bin/sh
+      - -c
+      - |
+        python manage.py wait_for_database
+        python manage.py wait_for_document_store
+        rm -f /app/celerybeat-schedule
+        celery \
+          --app cybersmart_assessment.system.celery.app.app \
+          worker \
+          --beat \
+          --schedule-filename=/home/user/app/celerybeat-schedule \
+          --logfile=/dev/null \
+          --task-events
+    env_file: .env
+    volumes:
+      - ./manage.py:/home/user/app/manage.py
+      - ./src/cybersmart_assessment:/home/user/app/cybersmart_assessment/
+      - ./_static:/home/user/static
+    depends_on:
+      - web_app
+      - cache
+      - document_store
+    restart: on-failure
+
 volumes:
   database_storage:
   document_store_storage:

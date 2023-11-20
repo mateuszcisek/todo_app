@@ -66,6 +66,23 @@ DOCUMENT_STORE_USER = config.document_store_user
 DOCUMENT_STORE_PASSWORD = config.document_store_password.get_secret_value()
 DOCUMENT_STORE_NAME = config.document_store_name
 
+CELERY_APP_NAME = "celeryapp"
+CELERY_BROKER_URL = f"redis://{config.cache_host}:{config.cache_port}/1"
+CELERY_RESULT_BACKEND = f"redis://{config.cache_host}:{config.cache_port}/2"
+CELERYD_HIJACK_ROOT_LOGGER = False
+
+CELERY_APP_CONFIGURATION = {
+    "task_default_queue": "weather",
+    "task_serializer": "json",
+    "accept_content": ["json"],
+    "result_serializer": "json",
+    "timezone": config.time_zone,
+    "enable_utc": True,
+}
+CELERY_ROUTES = {
+    "system.celery.tasks.*": {"queue": "weather"},
+}
+
 WEATHER_API_KEY = config.weather_api_key
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -103,6 +120,21 @@ LOGGING = {
         "django": {
             "handlers": ["console"],
             "level": "INFO",
+        },
+        "celeryapp": {
+            "handlers": ["console"],
+            "level": config.logging_level,
+            "propagate": True,
+        },
+        "celery": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+        "celery.task": {
+            "handlers": [],
+            "level": "ERROR",
+            "propagate": True,
         },
     },
 }

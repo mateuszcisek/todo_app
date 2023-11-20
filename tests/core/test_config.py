@@ -9,6 +9,8 @@ from pydantic import ValidationError
 
 
 def _get_values(
+    cache_host: Optional[str] = "localhost",
+    cache_port: Optional[str] = "9876",
     database_host: Optional[str] = "localhost",
     database_name: Optional[str] = "db_name",
     database_password: Optional[str] = "db_pass",
@@ -32,6 +34,8 @@ def _get_values(
     Helper function that returns a dictionary with requested environment variables.
     """
     result = {
+        "CACHE_HOST": cache_host,
+        "CACHE_PORT": cache_port,
         "DATABASE_HOST": database_host,
         "DATABASE_NAME": database_name,
         "DATABASE_PASSWORD": database_password,
@@ -65,6 +69,8 @@ def test_settings_are_correct():
     Then all values in that object are set to correct values.
     """
     expected = {
+        "cache_host": "localhost",
+        "cache_port": 9876,
         "database_host": "localhost",
         "database_name": "db_name",
         "database_password": "db_pass",
@@ -87,6 +93,8 @@ def test_settings_are_correct():
     with patch.dict(os.environ, _get_values()):
         config = AppConfig()
 
+        assert config.cache_host == expected["cache_host"]
+        assert config.cache_port == expected["cache_port"]
         assert config.database_host == expected["database_host"]
         assert config.database_name == expected["database_name"]
         assert (
@@ -421,6 +429,30 @@ def test_document_store_name():
     assert config.document_store_name == "sample-db"
 
 
+def test_cache_host():
+    """
+    Given an environment variable for CACHE_HOST set
+    When we create a new object of AppConfig class
+    Then the value for cache_host is set to a correct value.
+    """
+    with patch.dict(os.environ, _get_values(cache_host="sample-cache")):
+        config = AppConfig()
+
+    assert config.cache_host == "sample-cache"
+
+
+def test_cache_port():
+    """
+    Given an environment variable for CACHE_PORT set
+    When we create a new object of AppConfig class
+    Then the value for cache_port is set to a correct value.
+    """
+    with patch.dict(os.environ, _get_values(cache_port="1234")):
+        config = AppConfig()
+
+    assert config.cache_port == 1234
+
+
 @pytest.mark.parametrize(
     "field_name",
     ("DEBUG", "LOGGING_LEVEL", "TIME_ZONE"),
@@ -438,20 +470,22 @@ def test_missing_optional_fields(field_name):
 @pytest.mark.parametrize(
     "field_name",
     (
+        "CACHE_HOST",
+        "CACHE_PORT",
+        "DATABASE_HOST",
+        "DATABASE_NAME",
+        "DATABASE_PASSWORD",
+        "DATABASE_PORT",
+        "DATABASE_USER",
+        "DOCUMENT_STORE_HOST",
+        "DOCUMENT_STORE_NAME",
+        "DOCUMENT_STORE_PASSWORD",
+        "DOCUMENT_STORE_PORT",
+        "DOCUMENT_STORE_USER",
         "PUBLIC_HOST",
         "SECRET_KEY",
         "STATIC_FILES_DIR",
         "WEATHER_API_KEY",
-        "DATABASE_HOST",
-        "DATABASE_PORT",
-        "DATABASE_USER",
-        "DATABASE_PASSWORD",
-        "DATABASE_NAME",
-        "DOCUMENT_STORE_HOST",
-        "DOCUMENT_STORE_PORT",
-        "DOCUMENT_STORE_USER",
-        "DOCUMENT_STORE_PASSWORD",
-        "DOCUMENT_STORE_NAME",
     ),
 )
 def test_missing_required_fields(field_name, monkeypatch):

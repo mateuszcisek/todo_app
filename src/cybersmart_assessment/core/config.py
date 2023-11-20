@@ -30,6 +30,9 @@ class AppConfig(BaseSettings):
     document_store_password: SecretStr
     document_store_name: str
 
+    cache_host: str
+    cache_port: int
+
     weather_api_key: str
 
     model_config = SettingsConfigDict(

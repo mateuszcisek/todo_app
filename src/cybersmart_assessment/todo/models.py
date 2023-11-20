@@ -33,7 +33,6 @@ class Weather(EmbeddedDocument):
     main = StringField(required=True)
     code = FloatField(required=True)
     temperature = FloatField(required=True)
-    updated_at = DateTimeField()
 
 
 class Task(Document):

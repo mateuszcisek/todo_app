@@ -15,6 +15,7 @@ htmlcov/
 
 _storage/
 config/
+conftest.py
 tests/
 _static/
 
